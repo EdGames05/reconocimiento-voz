@@ -1,194 +1,27 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<!--[if lte IE 9]>
+<html lang="en" class="oldie">
+<![endif]-->
+<!--[if gt IE 9]><!-->
+<html lang="en">
+<!--<![endif]-->
 <head>
-	<meta charset="utf-8">
-	<title>Voces</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link rel="shortcut icon" href="img/min_logo.png">
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<script src="jquery-3.1.1.js"></script>
-	<script src="artyom.min.js"></script>
-	<script src="artyomCommands.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Form UI</title>
+  <link rel="stylesheet" media="all" href="style.css" />
 </head>
 <body>
-	<div>
-		<nav class="navbar navbar-dark bg-dark">
-		  <a class="navbar-brand titulo" href="#">
-		  	Ed
-		    <img src="img/min_logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-		    Company
-		  </a>
-		</nav>
-	</div>
-	<br>
-	<div class="container">
-		<div class="row form-group">
-			<div class="col-md-2">
-				<label class="label-control" for="ddl_idioma" id="lbd_ddl_idioma">Idioma:</label>
-			</div>
-			<div class="col-md-10">
-				<select class="form-control" id="ddl_idioma">
-					<option value="1">Español</option>
-					<option value="2">Ingles</option>
-					<option value="3">Japones</option>
-				</select>
-			</div>
-		</div>
-
-		<div class="row form-group">
-			<div class="col-md-2">
-				<button class="btn btn-success" onclick="startArtyom();">Comenzar</button>
-			</div>
-			<div class="col-md-2">
-				<button class="btn btn-danger" onclick="stopArtyom();">Parar</button>
-			</div>
-			<div class="col-md-2">
-				<button class="btn btn-dark" onclick="borrarTexto();">Borrar texto</button>
-			</div>
-		</div>
-
-	</div>
-
-	<div class="container txtMain" id="txtMain">
-	</div>
-	
-	<script>
-
-		function borrarTexto()
-		{
-			document.getElementById('txtMain').innerHTML = "";
-		}
-	
-	// $(document).ready(function() {
-		var texto = "";
-		//El sistema responde
-		artyom.addCommands([
-			{
-				indexes:["buenos días",'¿Qué tal estas?','Una pregunta'],
-				action: function(i){
-					if (i==0) {
-						artyom.say("Buenos dias");
-					}
-					if (i==1) {
-						artyom.say("Bien");
-					}
-					if (i==2) {
-						artyom.say("¿Qué pasa?");
-					}
-				}
-			},
-			{
-				indexes:['me voy','chau'],
-				action: function(){
-					alert('ok, chau');					
-				}
-			},
-			{
-				indexes:['abrir google','abrir facebook', 'abrir youtube'],
-				action: function(i){
-					if (i==0) {
-						artyom.say("Abriendo google");
-						window.open("http://www.google.com",'_blank');
-					}
-					if (i==1) {
-						artyom.say("Abriendo facebook");
-						window.open("http://www.facebook.com",'_blank');
-					}
-					if (i==2) {
-						artyom.say("Abriendo youtube");
-						window.open("https://www.youtube.com",'_blank');
-					}
-				}
-			},
-			{
-				/*indexes:['limpiar'],
-				action: function(){
-					$('#salida').val('');
-				}*/
-			}
-		]); 
-
-		// Escribir lo que escucha.
-		artyom.redirectRecognizedTextOutput(function(text,isFinal){
-			texto = $('#txtMain');
-			if (isFinal) {
-				document.getElementById('txtMain').innerHTML = text;
-				//texto.val(text);
-			}else{
-				
-			}
-		});
-
-
-		/*fuction cambiarIdioma(){
-			stopArtyom();
-			startArtyom();
-		}*/
-
-		//inicializamos la libreria Artyom
-		function startArtyom(){
-			var selec = $('#ddl_idioma').find(":selected").val();
-			console.log(selec);
-			var idioma = "";
-			switch(selec){
-					case '1':
-						idioma = "es-ES";
-					case '2':
-						idioma = "en-US";
-					case '3':
-						idioma = "ja-JP";
-			}
-			artyom.initialize({
-				lang: 'es-ES',
-				continuous:true,// Reconoce 1 solo comando y para de escuchar
-	            listen:true, // Iniciar !
-	            debug:true, // Muestra un informe en la consola
-	            speed:1.1 // Habla normalmente
-			});
-		};
-		
-		// Stop libreria;
-		function stopArtyom(){
-			artyom.fatality();// Detener cualquier instancia previa
-		};
-
-		// leer texto
-		$('#btnLeer').click(function (e) {
-            e.preventDefault();
-            var btn = $('#btnLeer');
-            if (artyom.speechSupported()) {
-                btn.addClass('disabled');
-                btn.attr('disabled', 'disabled');
-
-                var text = $('#leer').val();
-                if (text) {
-                    var lines = $("#leer").val().split("\n").filter(function (e) {
-                        return e
-                    });
-                    var totalLines = lines.length - 1;
-
-                    for (var c = 0; c < lines.length; c++) {
-                        var line = lines[c];
-                        if (totalLines == c) {
-                            artyom.say(line, {
-                                onEnd: function () {
-                                    btn.removeAttr('disabled');
-                                    btn.removeClass('disabled');
-                                }
-                            });
-                        } else {
-                            artyom.say(line);
-                        }
-                    }
-                }
-            } else {
-                alert("Your browser cannot talk !");
-            }
-        });
-
-	// });
-	</script>
+<form class="form">
+  <h2>CONTACT US</h2>
+  <p type="Name:"><input placeholder="Write your name here.."></input></p>
+  <p type="Email:"><input placeholder="Let us know how to contact you back.."></input></p>
+  <p type="Message:"><input placeholder="What would you like to tell us.."></input></p>
+  <button>Send Message</button>
+  <div>
+    <span class="fa fa-phone"></span>001 1023 567
+    <span class="fa fa-envelope-o"></span> contact@company.com
+  </div>
+</form>
 </body>
 </html>
