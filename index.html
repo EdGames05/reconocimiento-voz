@@ -17,7 +17,10 @@
 
   <script type="text/javascript">
     function ConsultaPokeApi(){
-      fetch("https://pokeapi.co/api/v2/pokemon/ditto")
+
+      var nombre_pokemon = document.getElementById("nombre_pokemon").value;
+
+      fetch("https://pokeapi.co/api/v2/pokemon/" + nombre_pokemon)
       .then(respuesta => respuesta.json())
       .then(function(res){
         var json_res = document.getElementById('json_res');
@@ -28,7 +31,7 @@
 
   <div class="form">
     <h2>CONTACT US</h2>
-    <p type="Name:"><input placeholder="Write your name here.."></input></p>
+    <p type="Name:"><input id="nombre_pokemon" placeholder="Ejemplo: Pikachu"></input></p>
     <p type="Email:"><input placeholder="Let us know how to contact you back.."></input></p>
     <p type="Message:"><input placeholder="What would you like to tell us.."></input></p>
     <button type="button" id="btn_enviar" name="btn_enviar" onclick="ConsultaPokeApi()">Send Message</button>
